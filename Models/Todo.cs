@@ -16,6 +16,6 @@ public class Todo
     public DateTime Updated { get; set; } = DateTime.Now;
     
     [DisplayName("Usuario")]
-    public string User { get; set; }
+    public string? User { get; set; }
     
 }

@@ -10,6 +10,7 @@ namespace TodoList_MVC
     public class TodoController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private string? x;
 
         public TodoController(ApplicationDbContext context)
         {
@@ -49,6 +50,7 @@ namespace TodoList_MVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,Title,Done,Updated,User")] Todo todo)
         {
+
             if (ModelState.IsValid)
             {
                 todo.User = User.Identity.Name;
@@ -56,6 +58,7 @@ namespace TodoList_MVC
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(todo);
         }
 
