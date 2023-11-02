@@ -7,7 +7,7 @@ public class Todo
 
     [DisplayName("Titulo")]
     [Required(ErrorMessage = "Titulo deve ser obrigatório")]
-    public string Title { get; set; }
+    public required string Title { get; set; }
 
     [DisplayName("Concluida")]
     public bool Done { get; set; }

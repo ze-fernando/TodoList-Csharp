@@ -10,7 +10,6 @@ namespace TodoList_MVC
     public class TodoController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private string? x;
 
         public TodoController(ApplicationDbContext context)
         {
@@ -20,7 +19,9 @@ namespace TodoList_MVC
         public async Task<IActionResult> Index()
         {
               return _context.Todos != null ? 
-                          View(await _context.Todos.ToListAsync()) :
+                          View(await _context.Todos.AsNoTracking()
+                          .Where(x => x.User == User.Identity.Name)
+                          .ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Todos'  is null.");
         }
 
@@ -38,6 +39,8 @@ namespace TodoList_MVC
                 return NotFound();
             }
 
+            if(todo.User != User.Identity.Name) return NotFound();
+
             return View(todo);
         }
 
@@ -48,7 +51,7 @@ namespace TodoList_MVC
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Title,Done,Updated,User")] Todo todo)
+        public async Task<IActionResult> Create([Bind("id,Title,Done")] Todo todo)
         {
 
             if (ModelState.IsValid)
@@ -74,6 +77,8 @@ namespace TodoList_MVC
             {
                 return NotFound();
             }
+            if(todo.User != User.Identity.Name) return NotFound();
+
             return View(todo);
         }
 
@@ -90,6 +95,8 @@ namespace TodoList_MVC
             {
                 try
                 {
+                    todo.User = User.Identity.Name;
+                    todo.Updated = DateTime.Now;
                     _context.Update(todo);
                     await _context.SaveChangesAsync();
                 }
@@ -122,6 +129,8 @@ namespace TodoList_MVC
             {
                 return NotFound();
             }
+
+            if(todo.User != User.Identity.Name) return NotFound();
 
             return View(todo);
         }
