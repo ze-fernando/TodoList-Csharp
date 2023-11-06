@@ -10,7 +10,8 @@ Simple todo list project make with, dotnet, SQLite, Boostrap, Microsoft Identity
 
 `dotnet clean`
 
-`dotnet run watch`
+`dotnet run`
+
 
 *To use it you need to be authenticated
 
